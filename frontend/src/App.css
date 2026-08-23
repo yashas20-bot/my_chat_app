@@ -1,42 +1,115 @@
-#root {
-  max-width: 1280px;
+/* Bright & Vibrant Stream Chat Overrides */
+
+/* Chat Container Glassmorphic Card */
+.chat-app-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+@media (min-width: 768px) {
+  .chat-app-wrapper {
+    height: 94vh;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* Stream Chat Theme Customizations */
+.str-chat {
+  --str-chat__primary-color: #6366f1;
+  --str-chat__active-primary-color: #4f46e5;
+  --str-chat__surface-color: #ffffff;
+  --str-chat__secondary-surface-color: #f8fafc;
+  --str-chat__background-color: transparent;
+  font-family: inherit;
+  height: 100%;
 }
 
-.card {
-  padding: 2em;
+.str-chat__channel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.read-the-docs {
-  color: #888;
+/* Message List Background with Subtle Colorful Mesh */
+.str-chat__list,
+.str-chat__message-list {
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.03) 0%, transparent 60%),
+    #fcfdfe !important;
+  padding: 16px 20px !important;
+}
+
+/* Outgoing user message bubble - Vibrant Violet-Indigo Gradient */
+.str-chat__message--me .str-chat__message-bubble {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%) !important;
+  color: #ffffff !important;
+  border-radius: 18px 18px 4px 18px !important;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35) !important;
+  border: none !important;
+  font-weight: 500;
+}
+
+.str-chat__message--me .str-chat__message-bubble * {
+  color: #ffffff !important;
+}
+
+/* Incoming / Bot message bubble - Crisp Elevated Card with Left Accent */
+.str-chat__message--other .str-chat__message-bubble {
+  background: #ffffff !important;
+  color: #1e293b !important;
+  border-radius: 18px 18px 18px 4px !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  border-left: 4px solid #a855f7 !important;
+  font-weight: 450;
+}
+
+/* AI Bot special highlight */
+.str-chat__message[data-user-id="ai-bot"] .str-chat__message-bubble {
+  border-left: 4px solid #ec4899 !important;
+  background: linear-gradient(to right, rgba(236, 72, 153, 0.03), #ffffff) !important;
+}
+
+/* Message timestamps and text */
+.str-chat__message-simple-timestamp {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* User Avatars with vibrant glowing borders */
+.str-chat__avatar {
+  border-radius: 50% !important;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+  border: 2px solid #ffffff;
+}
+
+/* Custom modern scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }

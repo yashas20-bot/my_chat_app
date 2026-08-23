@@ -2,56 +2,65 @@
 import { useEffect, useState } from "react";
 import { StreamChat } from "stream-chat";
 
-const apiKey = "prwvgyhbsutz";      // Your Stream API key
-const userId = "yashas";            // Your unique user ID
+const apiKey = "m88xkkqbj5dg"; // Stream App Key
+const userId = "yashas";
 const userName = "Yashas";
-const backendUrl = "http://localhost:3000"; // Backend server URL
+const backendUrl = (import.meta as any).env?.VITE_BACKEND_URL || "http://localhost:5000";
 
 export const useCreateChatClient = () => {
   const [chatClient, setChatClient] = useState<StreamChat | null>(null);
   const [channel, setChannel] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let client: StreamChat | null = null;
 
     const init = async () => {
       try {
-        // 1. Get token from backend
-        const res = await fetch(`${backendUrl}/token?user_id=${userId}`);
-        
+        setLoading(true);
+        setError(null);
+
+        // 1. Fetch token from backend
+        const res = await fetch(`${backendUrl}/token?user_id=${userId}&user_name=${encodeURIComponent(userName)}`);
+
         if (!res.ok) {
-            throw new Error(`Backend token request failed with status: ${res.status}`);
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || `Backend server responded with status: ${res.status}`);
         }
-        
+
         const data = await res.json();
 
-        // 2. Init Stream client
+        // 2. Initialize Stream client
         client = StreamChat.getInstance(apiKey);
 
-        // 3. Connect user
+        // 3. Connect user with token
         await client.connectUser(
-          { id: userId, name: userName },
+          {
+            id: userId,
+            name: userName,
+            image: `https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`,
+          },
           data.token
         );
 
-        // 4. Create / watch channel
+        // 4. Create and watch channel
         const chan = client.channel("messaging", "general", {
           name: "General Chat",
-        } as any); 
-        
+        } as any);
+
         await chan.watch();
 
         setChatClient(client);
         setChannel(chan);
-      } catch (err) {
+      } catch (err: any) {
         console.error("Error connecting to Stream:", err);
+        setError(err.message || "Failed to connect to chat service.");
       } finally {
         setLoading(false);
       }
     };
 
-    // 🚀 FIX: Call the async function immediately to start the connection
     init();
 
     return () => {
@@ -59,7 +68,7 @@ export const useCreateChatClient = () => {
         client.disconnectUser();
       }
     };
-  }, []); // Run only once on component mount
+  }, []);
 
-  return { chatClient, channel, loading };
+  return { chatClient, channel, loading, error };
 };
